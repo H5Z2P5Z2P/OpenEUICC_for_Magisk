@@ -40,9 +40,11 @@ jobs:
       run: |
         output_apk_unpriv_filename=`cat output/apk_unpriv_filename`
         output_magisk_module_filename=`cat output/magisk_module_filename`
+        output_meta_overlayfs_filename=`cat output/meta_overlayfs_filename`
         version_str_commit=`cat output/version_str_commit`
         echo "output_apk_unpriv_filename=$output_apk_unpriv_filename" >> $GITHUB_ENV
         echo "output_magisk_module_filename=$output_magisk_module_filename" >> $GITHUB_ENV
+        echo "output_meta_overlayfs_filename=$output_meta_overlayfs_filename" >> $GITHUB_ENV
         echo "version_str_commit=$version_str_commit" >> $GITHUB_ENV
     
     - name: upload artifact
@@ -53,12 +55,13 @@ jobs:
         path: |
           output/${{ env.output_magisk_module_filename }}
           output/${{ env.output_apk_unpriv_filename }}
+          output/${{ env.output_meta_overlayfs_filename }}
 
     - name: releases
       if: ${{ env.env_flag_change == '1' }}
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "output/${{ env.output_magisk_module_filename }},output/${{ env.output_apk_unpriv_filename }}"
+        artifacts: "output/${{ env.output_magisk_module_filename }},output/${{ env.output_apk_unpriv_filename }},output/${{ env.output_meta_overlayfs_filename }}"
         bodyFile: "output/release_bodyfile"
         name: "${{ env.version_str_commit }}"
         tag: "${{ env.version_str_commit }}"
